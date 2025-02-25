@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    container_name: adoption-api
+    restart: always
+    ports:
+      - "3333:3333"
+    env_file:
+      - .env
+    depends_on:
+      - postgres_db
+
+  postgres_db:
+    image: bitnami/postgresql:latest
+    container_name: adoption-db
+    env_file:
+      - .env
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/bitnami/postgresql
+    
+volumes:
+  postgres-data:
+    driver: local

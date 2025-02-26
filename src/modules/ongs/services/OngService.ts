@@ -1,15 +1,21 @@
 import { env } from "@/env";
-import { PasswordDontMatchError } from "@/errors/PasswordDontMatchError";
-import { UserInvalidCredentialsError } from "@/errors/UserInvalidCredentialsError";
+import { PasswordDontMatchError } from "@/errors";
+import { UserInvalidCredentialsError } from "@/errors";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { CreateOngDtoType } from "../dtos/OngDTO";
-import { IOngRepository } from "../repositories/interface/IOngRepository";
+import { CreateOngDtoType } from "@/modules/ongs";
+import { IOngRepository } from "@/modules/ongs";
+import { UserAlreadyExistsError } from "@/errors";
 
 export class OngService {
     constructor(private ongRepository: IOngRepository) {}
   
     async create(data: CreateOngDtoType) {
+      const user = await this.ongRepository.findByEmail(data.email);
+      if (user) {
+        throw new UserAlreadyExistsError();
+      }
+
       if (data.password !== data.confirmPassword) {
         throw new PasswordDontMatchError();
       }

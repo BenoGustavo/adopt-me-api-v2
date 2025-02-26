@@ -16,7 +16,7 @@ export const CreateOngDTO = z.object({
 
 export const LoginOngDTO = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string(),
 });
 
 export type CreateOngDtoType = z.infer<typeof CreateOngDTO>;

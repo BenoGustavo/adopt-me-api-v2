@@ -1,9 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import type { Address, ONG } from "@prisma/client";
-import { CreateOngDtoType } from "../dtos/OngDTO";
-import { log } from "console";
+import type { CreateOngDtoType } from "@/modules/ongs"
+import { IOngRepository } from "../interface/IOngRepository";
 
-export class OngRepository {
+export class OngRepository implements IOngRepository {
     constructor(private prisma: PrismaClient) {}
   
     async create(data: CreateOngDtoType) {

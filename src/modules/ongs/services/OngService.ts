@@ -1,13 +1,13 @@
 import { env } from "@/env";
-import { OngRepository } from "../repositories/OngRepository";
+import { PasswordDontMatchError } from "@/errors/PasswordDontMatchError";
+import { UserInvalidCredentialsError } from "@/errors/UserInvalidCredentialsError";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { CreateOngDtoType } from "../dtos/OngDTO";
-import { PasswordDontMatchError } from "@/errors/PasswordDontMatchError";
-import { UserInvalidCredentialsError } from "@/errors/UserInvalidCredentialsError";
+import { IOngRepository } from "../repositories/interface/IOngRepository";
 
 export class OngService {
-    constructor(private ongRepository: OngRepository) {}
+    constructor(private ongRepository: IOngRepository) {}
   
     async create(data: CreateOngDtoType) {
       if (data.password !== data.confirmPassword) {

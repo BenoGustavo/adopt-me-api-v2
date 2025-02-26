@@ -1,7 +1,7 @@
 import { authMiddleware } from "@/middleware/auth";
 import { MakePetService } from "@/modules/pets";
 import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { PetController } from "./controllers/PetController";
+import { PetController } from "@/modules/pets";
 
 export async function registerPetRoutes(app: FastifyInstance){
     const petService = MakePetService();

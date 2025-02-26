@@ -1,6 +1,6 @@
 import { MakeUserService } from "@/modules/users";
 import { FastifyInstance } from "fastify";
-import { UserController } from "./controllers/UserController";
+import { UserController } from "@/modules/users";
 
 export async function registerUserRoutes(app: FastifyInstance) {
     const userService = MakeUserService();

@@ -1,8 +1,12 @@
 import { app } from "./app";
 import { env } from "./env";
 import { registerRoutes } from "./routes";
+import { zodErrorHandler } from "./errors/handlers/ZodErrorHandler";
+import { globalErrorHandler } from "./errors/handlers/GlobalErrorHandler";
 
 registerRoutes(app);
+app.setErrorHandler(zodErrorHandler);
+app.setErrorHandler(globalErrorHandler);
 
 app.listen({
     host: "0.0.0.0",

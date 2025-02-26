@@ -62,7 +62,7 @@ export class OngRepository implements IOngRepository {
         },
       })
       
-      return ongFound;
+      return ongFound || null;
     }
 
     async findById(id: string) {

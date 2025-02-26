@@ -1,16 +1,22 @@
 import { UserInvalidCredentialsError } from "@/errors/UserInvalidCredentialsError";
-import { UserRepository } from "../repositories/UserRepository";
+import { UserRepository } from "@/modules/users";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { env } from "@/env";
 import { CreateUserDtoType } from "../dtos/UserDTO";
-import { PasswordDontMatchError } from "@/errors/PasswordDontMatchError";
+import { PasswordDontMatchError } from "@/errors";
+import { UserAlreadyExistsError } from "@/errors";
 
 
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
   async create(userData:CreateUserDtoType ) {
+    const user = await this.userRepository.findByEmail(userData.email);
+    if (user) {
+      throw new UserAlreadyExistsError();
+    }
+
     if (userData.password !== userData.confirmPassword) {
       throw new PasswordDontMatchError();
     }

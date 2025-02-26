@@ -1,5 +1,5 @@
 import { OngRepository } from "@/modules/ongs";
-import { CreatePetDTO } from "../dtos/PetDTO";
+import { CreatePetDTOType } from "@/modules/pets"
 import { PetRepository } from "../repositories/prisma/PetRepository";
 import { UnautorizedError } from "@/errors/UnautorizedError";
 import { PetSize, PetType } from "@prisma/client";
@@ -12,7 +12,7 @@ export class PetService {
       private userRepository : UserRepository,
     ) {}
   
-    async create(ongId:string ,data: CreatePetDTO) {
+    async create(ongId:string ,data: CreatePetDTOType) {
       const ong = await this.ongRepository.findById(ongId);
       if (!ong) {
         throw new UnautorizedError("You don't have autorization to create a pet");

@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PetType {
+  CACHORRO
+  GATO
+}
+
+enum PetSize {
+  PEQUENO
+  MEDIO
+  GRANDE
+}
+
+model User {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  city       String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  Pet        Pet[]
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  street     String
+  number     Int
+  city       String
+  state      String
+  ONG        ONG[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model ONG {
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  address_id Address  @relation(fields: [addressId], references: [id])
+  whatsapp   String
+  pets       Pet[]
+  addressId  String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Pet {
+  id          String   @id @default(uuid())
+  name        String
+  age         Int
+  type        PetType // Ex: Cachorro, Gato
+  size        PetSize // Ex: Pequeno, Médio, Grande
+  breed       String
+  description String
+  city        String
+  is_adopted  Boolean  @default(false)
+  adopted_by  User?    @relation(fields: [userId], references: [id])
+  ongId       String
+  ong         ONG      @relation(fields: [ongId], references: [id], onDelete: Cascade)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  userId      String?
+}

@@ -1,7 +1,7 @@
 {
-  "name": "fastify-prisma-api-template",
+  "name": "adopt-me-api",
   "version": "1.0.0",
-  "description": "A simple fastify + prisma application with some boilerplate coded, it tries to follow the SOLID principles.",
+  "description": "adopt-me-api",
   "main": "server.js",
   "author": "Gustavo Leandro Gorges",
   "license": "MIT",

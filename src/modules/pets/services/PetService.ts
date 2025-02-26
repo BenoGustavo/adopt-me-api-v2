@@ -1,6 +1,6 @@
 import { OngRepository } from "@/modules/ongs";
 import { CreatePetDTO } from "../dtos/PetDTO";
-import { PetRepository } from "../repositories/PetRepository";
+import { PetRepository } from "../repositories/prisma/PetRepository";
 import { UnautorizedError } from "@/errors/UnautorizedError";
 import { PetSize, PetType } from "@prisma/client";
 import { UserRepository } from "@/modules/users";

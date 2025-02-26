@@ -1,11 +1,12 @@
 import { ONG, Pet, PetSize, PetType, PrismaClient, User } from "@prisma/client";
-import { CreatePetDTO } from "../dtos/PetDTO";
+import { CreatePetDTOType } from "@/modules/pets";
 import { OngAddressError } from "@/errors/OngAddressError";
+import { IPetRepository } from "../interfaces/IPetRepository";
 
-export class PetRepository {
+export class PetRepository implements IPetRepository {
     constructor(private prisma: PrismaClient) {}
   
-    async create(owner:ONG ,data: CreatePetDTO) {
+    async create(owner:ONG ,data: CreatePetDTOType) {
       const ongAddress = await this.prisma.address.findUnique({
         where: { id: owner.addressId }
       });

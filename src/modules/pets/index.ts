@@ -1,10 +1,11 @@
 import { PetSize, PetType } from "@prisma/client";
 import { PetController } from "./controllers/PetController";
-import { CreatePetDTO } from "./dtos/PetDTO";
-import { PetRepository } from "./repositories/PetRepository";
+import { CreatePetDTO, CreatePetDTOType } from "./dtos/PetDTO";
+import { PetRepository } from "./repositories/prisma/PetRepository";
+import { IPetRepository } from "./repositories/interfaces/IPetRepository";
 import { registerPetRoutes } from "./routes";
 import { PetService } from "./services/PetService";
-
+import { MakePetService } from "./services/factories/MakePetService";
 
 export {
     PetController,
@@ -13,5 +14,11 @@ export {
     registerPetRoutes,
     PetService,
     PetSize,
-    PetType
+    PetType,
+    MakePetService
+}
+
+export type {
+    IPetRepository,
+    CreatePetDTOType
 }

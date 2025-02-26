@@ -1,15 +1,11 @@
-import { FastifyInstance,FastifyReply,FastifyRequest } from "fastify";
-import { PetController } from "./controllers/PetController";
-import { PetService } from "./services/PetService";
-import { PetRepository } from "./repositories/PetRepository";
-import { PrismaClient } from "@prisma/client";
 import { authMiddleware } from "@/middleware/auth";
-import { OngRepository } from "@/modules/ongs";
-import { UserRepository } from "../users";
+import { MakePetService } from "@/modules/pets";
+import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
+import { PetController } from "./controllers/PetController";
 
 export async function registerPetRoutes(app: FastifyInstance){
-    const prisma = new PrismaClient();
-    const petController = new PetController(new PetService(new PetRepository(prisma), new OngRepository(prisma), new UserRepository(prisma)));
+    const petService = MakePetService();
+    const petController = new PetController(petService);
     
     app.post("/pets", { preHandler: authMiddleware }, (req, res) => petController.create(req, res));
     

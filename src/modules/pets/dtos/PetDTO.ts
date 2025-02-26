@@ -10,4 +10,4 @@ export const CreatePetDTO = z.object({
     description: z.string().optional(),
 });
 
-export type CreatePetDTO = z.infer<typeof CreatePetDTO>;
+export type CreatePetDTOType = z.infer<typeof CreatePetDTO>;

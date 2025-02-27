@@ -1,5 +1,20 @@
 {
     "extends": [
-        "@rocketseat/eslint-config/node"
-    ]
+        "@rocketseat/eslint-config/node",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "prettier"
+    ],
+    "ignorePatterns": [
+        "node_modules",
+        "dist",
+        "*.spec.ts",
+        "*.spec.js",
+        "*.test.ts",
+        "*.test.js"
+    ],
+    "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "prettier/prettier": ["error"]
+    }
 }

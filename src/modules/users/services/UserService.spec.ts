@@ -1,5 +1,5 @@
 import { UserService } from "./UserService";
-import { CreateUserDtoType, UserRepository } from "@/modules/users";
+import { UserRepository } from "@/modules/users";
 import { UserInvalidCredentialsError } from "@/errors/UserInvalidCredentialsError";
 import { PasswordDontMatchError } from "@/errors/PasswordDontMatchError";
 import { UserAlreadyExistsError } from "@/errors/UserAlreadyExistsError";

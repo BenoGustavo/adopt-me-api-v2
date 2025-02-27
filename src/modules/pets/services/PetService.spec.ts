@@ -115,7 +115,7 @@ describe('PetService', () => {
                 }
             );
 
-            const result = await petService.adoptPet(petId, userId, ongId);
+            await petService.adoptPet(petId, userId, ongId);
 
             expect(userRepository.findById).toHaveBeenCalledWith(userId);
             expect(ongRepository.findById).toHaveBeenCalledWith(ongId);

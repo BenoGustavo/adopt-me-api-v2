@@ -1,6 +1,6 @@
-# Fastify Prisma API Template
+# Adopt Me API
 
-A simple Fastify + Prisma application with some boilerplate code, following the SOLID principles.
+Adopt Me API is a Fastify-based application designed to manage pet adoptions. It uses Prisma as the ORM and follows SOLID principles for a clean and maintainable codebase.
 
 ## Table of Contents
 
@@ -9,6 +9,7 @@ A simple Fastify + Prisma application with some boilerplate code, following the 
 - [Scripts](#scripts)
 - [Environment Variables](#environment-variables)
 - [Project Structure](#project-structure)
+- [API Documentation](#api-documentation)
 - [License](#license)
 
 ## Installation
@@ -16,8 +17,8 @@ A simple Fastify + Prisma application with some boilerplate code, following the 
 1. Clone the repository:
 
     ```sh
-    git clone https://github.com/yourusername/fastify-prisma-api-template.git
-    cd fastify-prisma-api-template
+    git clone https://github.com/yourusername/adopt-me-api.git
+    cd adopt-me-api
     ```
 
 2. Install dependencies:
@@ -33,6 +34,12 @@ A simple Fastify + Prisma application with some boilerplate code, following the 
     ```
 
 4. Update the .env file with your configuration.
+
+5. Generate Prisma client:
+
+    ```sh
+    npx prisma generate
+    ```
 
 ## Usage
 
@@ -66,7 +73,9 @@ yarn start
 The following environment variables are used in this project:
 
 - `NODE_ENV`: The environment in which the application is running (`dev`, `prod`, `test`).
-- `PORT`: The port on which the server will run.
+- `PORT`: The port on which the server runwill.
+- `JWT_SECRET`: Secret key for JWT authentication.
+- `DATABASE_URL`: Database connection URL.
 
 ## Project Structure
 
@@ -84,40 +93,88 @@ eslint.config.mjs
 jest.config.ts
 LICENSE
 package.json
-prisma/
-  schema.prisma
 README.md
 src/
-  __tests__/
-    services/
-      hello-world.service.spec.ts
   app.ts
+  database/
+    prisma/
+      schema.prisma
   env/
     index.ts
   errors/
+    handlers/
+      GlobalErrorHandler.ts
+      ZodErrorHandler.ts
     InvalidEnvironmentVariablesError.ts
-  http/
-    controllers/
-      hello-world.controller.ts
-    routes/
-      hello-world.router.ts
-  repositories/
-    in-memory/
-      database/
-        init-sqlite.ts
-        sqlite.ts
-      sqlite-hello-world.repository.ts
-    interfaces/
-      hello-world.repository.ts
-    postgres/
-      hello-world.repository.ts
+    OngAddressError.ts
+    PasswordDontMatchError.ts
+    UnautorizedError.ts
+    UserAlreadyExistsError.ts
+    UserInvalidCredentialsError.ts
+    UserNotFoundError.ts
+  middleware/
+    auth.test.ts
+    auth.ts
+    swagger.ts
+  modules/
+    ongs/
+      controllers/
+        OngController.ts
+      dtos/
+        OngDTO.ts
+      repositories/
+        interfaces/
+          IOngRepository.ts
+        prisma/
+          OngRepository.ts
+      services/
+        factories/
+          MakeOngService.ts
+        OngService.ts
+      routes.ts
+      index.ts
+    pets/
+      controllers/
+        PetController.ts
+      dtos/
+        PetDTO.ts
+      repositories/
+        interfaces/
+          IPetRepository.ts
+        prisma/
+          PetRepository.ts
+      services/
+        factories/
+          MakePetService.ts
+        PetService.ts
+      routes.ts
+      index.ts
+    users/
+      controllers/
+        UserController.ts
+      dtos/
+        UserDTO.ts
+      repositories/
+        interfaces/
+          IUserRepository.ts
+        prisma/
+          UserRepository.ts
+      services/
+        factories/
+          MakeUserService.ts
+        UserService.ts
+      routes.ts
+      index.ts
+  routes.ts
   server.ts
-  services/
-    factories/
-      make-hello-world-service.ts
-    hello-world.service.ts
+  utils/
+    Response.ts
 tsconfig.json
 ```
+
+## API Documentation
+
+The API documentation is available at `/docs` when the server is running. It uses Swagger UI for interactive API documentation.
 
 ## License
 

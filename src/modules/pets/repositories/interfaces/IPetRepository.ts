@@ -1,5 +1,5 @@
 import { ONG, Pet, PetSize, PetType } from "@prisma/client";
-import { CreatePetDTO } from "@/modules/pets/";
+import { CreatePetDTOType } from "@/modules/pets/";
 
 type findPetByIdReturnType = Promise<{
     ongResponsavel: {
@@ -49,7 +49,7 @@ type findWithFiltersReturnType = Promise<Array<{
   }>>;
 
 export interface IPetRepository {
-    create(owner: ONG, data: CreatePetDTO): Promise<Pet>;
+    create(owner: ONG, data: CreatePetDTOType): Promise<Pet>;
     findPetById(id: string): findPetByIdReturnType
     findWithFilters(
       city: string,

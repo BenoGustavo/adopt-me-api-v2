@@ -1,4 +1,4 @@
-import { ONG, Pet, PetSize, PetType, PrismaClient, User } from "@prisma/client";
+import { ONG, Pet, PetSize, PetType, PrismaClient } from "@prisma/client";
 import { CreatePetDTOType } from "@/modules/pets";
 import { OngAddressError } from "@/errors/OngAddressError";
 import { IPetRepository } from "../interfaces/IPetRepository";

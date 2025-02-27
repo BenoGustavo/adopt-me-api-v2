@@ -1,11 +1,11 @@
 import { env } from "@/env"
-import { FastifyReply } from "fastify"
+import { FastifyReply, FastifyRequest } from "fastify"
 import { ZodError } from "zod"
 import { fromError } from "zod-validation-error"
 import { Response } from "@/utils/Response"
 
 
-function zodErrorHandler(error: Error, _: any, reply: FastifyReply) {
+function zodErrorHandler(error: Error, _: FastifyRequest, reply: FastifyReply) {
     if (env.NODE_ENV !== 'prod') {
         console.error(error);
     } else {

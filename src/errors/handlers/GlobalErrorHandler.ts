@@ -1,4 +1,4 @@
-import { FastifyReply } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { 
   InvalidEnvironmentVariablesError, 
   OngAddressError, 
@@ -11,7 +11,7 @@ import {
 import { Response } from "@/utils/Response";
 import { env } from "@/env";
 
-function globalErrorHandler(error: Error, _: any, reply: FastifyReply) {
+function globalErrorHandler(error: Error, _: FastifyRequest, reply: FastifyReply) {
   if (error instanceof InvalidEnvironmentVariablesError) {
     const response = new Response(500, "Invalid environment variables", null, error.message);
     reply.status(500).send(response);

@@ -1,0 +1,535 @@
+openapi: 3.0.0
+info:
+    title: Adopt Me API
+    description: API documentation for the Adopt Me application
+    version: 1.0.0
+servers:
+    - url: http://localhost:3333
+      description: Local server
+
+paths:
+    /ongs:
+        post:
+            summary: Register a new ONG
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                name:
+                                    type: string
+                                email:
+                                    type: string
+                                    format: email
+                                password:
+                                    type: string
+                                confirmPassword:
+                                    type: string
+                                address:
+                                    type: object
+                                    properties:
+                                        street:
+                                            type: string
+                                        number:
+                                            type: integer
+                                        city:
+                                            type: string
+                                        state:
+                                            type: string
+                                whatsapp:
+                                    type: string
+            responses:
+                "201":
+                    description: ONG created successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "400":
+                    description: Bad request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+    /ongs/login:
+        post:
+            summary: Login an ONG
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    format: email
+                                password:
+                                    type: string
+            responses:
+                "200":
+                    description: ONG logged in successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+    /users:
+        post:
+            summary: Register a new user
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/CreateUserDTO"
+            responses:
+                "201":
+                    description: User created successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "400":
+                    description: Bad request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+    /users/login:
+        post:
+            summary: Login a user
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/LoginUserDTO"
+            responses:
+                "200":
+                    description: User logged in successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+    /pets:
+        post:
+            summary: Register a new pet
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/CreatePetDTO"
+            responses:
+                "201":
+                    description: Pet created successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+    /pets/{city}/filters:
+        get:
+            summary: Get pets with filters
+            parameters:
+                - in: path
+                  name: city
+                  required: true
+                  schema:
+                      type: string
+                - in: query
+                  name: size
+                  schema:
+                      type: string
+                - in: query
+                  name: age
+                  schema:
+                      type: integer
+                - in: query
+                  name: breed
+                  schema:
+                      type: string
+                - in: query
+                  name: type
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Pets found successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+    /pets/{id}:
+        get:
+            summary: Get pet by ID
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Pet found successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "404":
+                    description: Pet not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+        put:
+            summary: Adopt a pet
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                requesterId:
+                                    type: string
+            responses:
+                "200":
+                    description: Pet adopted successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+        delete:
+            summary: Delete a pet
+            parameters:
+                - in: path
+                  name: id
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                "200":
+                    description: Pet deleted successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+    /pets/adopted:
+        get:
+            summary: Get adopted pets
+            responses:
+                "200":
+                    description: Adopted pets found successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+                "401":
+                    description: Unauthorized
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: integer
+                                    message:
+                                        type: string
+                                    data:
+                                        type: object
+                                    error:
+                                        type: object
+                                        nullable: true
+
+components:
+    schemas:
+        CreateUserDTO:
+            type: object
+            properties:
+                name:
+                    type: string
+                email:
+                    type: string
+                    format: email
+                password:
+                    type: string
+                confirmPassword:
+                    type: string
+                city:
+                    type: string
+
+        LoginUserDTO:
+            type: object
+            properties:
+                email:
+                    type: string
+                    format: email
+                password:
+                    type: string
+
+        CreatePetDTO:
+            type: object
+            properties:
+                name:
+                    type: string
+                age:
+                    type: integer
+                type:
+                    type: string
+                    enum:
+                        - CACHORRO
+                        - GATO
+                size:
+                    type: string
+                    enum:
+                        - PEQUENO
+                        - MEDIO
+                        - GRANDE
+                breed:
+                    type: string
+                description:
+                    type: string
+                    nullable: true

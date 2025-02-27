@@ -12,7 +12,7 @@
     "build": "tsup src --out-dir dist",
     "prisma-web": "prisma studio",
     "test": "jest",
-    "format": "prettier --write --ignore-unknown 'src/**/*.{js,jsx,ts,tsx,css,json}' --config ./.prettierrc.json",
+    "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,css,json}' --config ./.prettierrc.json",
     "lint": "eslint . ",
     "lint:fix": "eslint . --fix "
   },

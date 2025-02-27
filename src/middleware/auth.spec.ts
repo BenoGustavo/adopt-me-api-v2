@@ -1,56 +1,58 @@
-import { FastifyRequest, FastifyReply } from "fastify";
-import { authMiddleware } from "./auth";
+import { FastifyReply, FastifyRequest } from "fastify";
 import jwt from "jsonwebtoken";
+import { authMiddleware } from "./auth";
 
 jest.mock("jsonwebtoken");
 
 describe("authMiddleware", () => {
-    let request: Partial<FastifyRequest>;
-    let reply: Partial<FastifyReply>;
-    let done: jest.Mock;
+	let request: Partial<FastifyRequest>;
+	let reply: Partial<FastifyReply>;
+	let done: jest.Mock;
 
-    beforeEach(() => {
-        request = {
-            headers: {}
-        };
-        reply = {
-            status: jest.fn().mockReturnThis(),
-            send: jest.fn()
-        };
-        done = jest.fn();
-    });
+	beforeEach(() => {
+		request = {
+			headers: {},
+		};
+		reply = {
+			status: jest.fn().mockReturnThis(),
+			send: jest.fn(),
+		};
+		done = jest.fn();
+	});
 
-    it("should return 401 if no token is provided", () => {
-        authMiddleware(request as FastifyRequest, reply as FastifyReply, done);
+	it("should return 401 if no token is provided", () => {
+		authMiddleware(request as FastifyRequest, reply as FastifyReply, done);
 
-        expect(reply.status).toHaveBeenCalledWith(401);
-        expect(reply.send).toHaveBeenCalledWith({ error: "Token not provided" });
-        expect(done).not.toHaveBeenCalled();
-    });
+		expect(reply.status).toHaveBeenCalledWith(401);
+		expect(reply.send).toHaveBeenCalledWith({
+			error: "Token not provided",
+		});
+		expect(done).not.toHaveBeenCalled();
+	});
 
-    it("should return 401 if token is invalid", () => {
-        request.headers = { authorization: "Bearer invalidtoken" };
-        (jwt.verify as jest.Mock).mockImplementation(() => {
-            throw new Error("Invalid token");
-        });
+	it("should return 401 if token is invalid", () => {
+		request.headers = { authorization: "Bearer invalidtoken" };
+		(jwt.verify as jest.Mock).mockImplementation(() => {
+			throw new Error("Invalid token");
+		});
 
-        authMiddleware(request as FastifyRequest, reply as FastifyReply, done);
+		authMiddleware(request as FastifyRequest, reply as FastifyReply, done);
 
-        expect(reply.status).toHaveBeenCalledWith(401);
-        expect(reply.send).toHaveBeenCalledWith({ error: "Invalid token" });
-        expect(done).not.toHaveBeenCalled();
-    });
+		expect(reply.status).toHaveBeenCalledWith(401);
+		expect(reply.send).toHaveBeenCalledWith({ error: "Invalid token" });
+		expect(done).not.toHaveBeenCalled();
+	});
 
-    it("should call done if token is valid", () => {
-        const decodedToken = { id: 1, name: "Test User" };
-        request.headers = { authorization: "Bearer validtoken" }; 
-        (jwt.verify as jest.Mock).mockReturnValue(decodedToken);
+	it("should call done if token is valid", () => {
+		const decodedToken = { id: 1, name: "Test User" };
+		request.headers = { authorization: "Bearer validtoken" };
+		(jwt.verify as jest.Mock).mockReturnValue(decodedToken);
 
-        authMiddleware(request as FastifyRequest, reply as FastifyReply, done);
+		authMiddleware(request as FastifyRequest, reply as FastifyReply, done);
 
-        expect(request.user).toEqual(decodedToken);
-        expect(done).toHaveBeenCalled();
-        expect(reply.status).not.toHaveBeenCalled();
-        expect(reply.send).not.toHaveBeenCalled();
-    });
+		expect(request.user).toEqual(decodedToken);
+		expect(done).toHaveBeenCalled();
+		expect(reply.status).not.toHaveBeenCalled();
+		expect(reply.send).not.toHaveBeenCalled();
+	});
 });

@@ -1,22 +1,18 @@
-import { OngRepository } from "./repositories/prisma/OngRepository";
 import { OngController } from "./controllers/OngController";
-import { OngService } from "./services/OngService";
-import { registerOngRoutes } from "./routes";
-import { CreateOngDTO } from "./dtos/OngDTO";
-import { CreateOngDtoType } from "./dtos/OngDTO";
+import { CreateOngDTO, CreateOngDtoType } from "./dtos/OngDTO";
 import { IOngRepository } from "./repositories/interface/IOngRepository";
+import { OngRepository } from "./repositories/prisma/OngRepository";
+import { registerOngRoutes } from "./routes";
 import { MakeOngService } from "./services/factories/MakeOngService";
+import { OngService } from "./services/OngService";
 
 export {
-    OngRepository,
-    OngController,
-    OngService,
-    registerOngRoutes,
-    CreateOngDTO,
-    MakeOngService
-}
+	CreateOngDTO,
+	MakeOngService,
+	OngController,
+	OngRepository,
+	OngService,
+	registerOngRoutes,
+};
 
-export type {
-    CreateOngDtoType,
-    IOngRepository
-}
+export type { CreateOngDtoType, IOngRepository };

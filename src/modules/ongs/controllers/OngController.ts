@@ -1,28 +1,32 @@
-import { CreateOngDTO,LoginOngDTO } from "../dtos/OngDTO";
-import { OngService } from "../services/OngService";
-import { FastifyReply, FastifyRequest } from "fastify";
 import { Response } from "@/utils/Response";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { CreateOngDTO, LoginOngDTO } from "../dtos/OngDTO";
+import { OngService } from "../services/OngService";
 
 export class OngController {
-    constructor(private ongService: OngService) {}
-  
-    async register(request: FastifyRequest, reply: FastifyReply) {
-      const ongRegistrationData = CreateOngDTO.parse(request.body);
+	constructor(private ongService: OngService) {}
 
-      const ong = await this.ongService.create(ongRegistrationData);
+	async register(request: FastifyRequest, reply: FastifyReply) {
+		const ongRegistrationData = CreateOngDTO.parse(request.body);
 
-      const response = new Response(201 ,"Ong created successfully", ong);
+		const ong = await this.ongService.create(ongRegistrationData);
 
-      return reply.status(201).send(response);
-    }
+		const response = new Response(201, "Ong created successfully", ong);
 
-    async login(request: FastifyRequest, reply: FastifyReply) {
-      const { email, password } = LoginOngDTO.parse(request.body);
+		return reply.status(201).send(response);
+	}
 
-      const authData = await this.ongService.authenticate(email, password);
+	async login(request: FastifyRequest, reply: FastifyReply) {
+		const { email, password } = LoginOngDTO.parse(request.body);
 
-      const response = new Response(200 ,"Ong logged in successfully", authData);
+		const authData = await this.ongService.authenticate(email, password);
 
-      return reply.status(200).send(response);
-    }
+		const response = new Response(
+			200,
+			"Ong logged in successfully",
+			authData,
+		);
+
+		return reply.status(200).send(response);
+	}
 }

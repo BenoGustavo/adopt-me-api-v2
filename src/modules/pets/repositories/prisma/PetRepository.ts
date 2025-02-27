@@ -1,123 +1,123 @@
-import { ONG, Pet, PetSize, PetType, PrismaClient } from "@prisma/client";
-import { CreatePetDTOType } from "@/modules/pets";
 import { OngAddressError } from "@/errors/OngAddressError";
+import { CreatePetDTOType } from "@/modules/pets";
+import { ONG, Pet, PetSize, PetType, PrismaClient } from "@prisma/client";
 import { IPetRepository } from "../interfaces/IPetRepository";
 
 export class PetRepository implements IPetRepository {
-    constructor(private prisma: PrismaClient) {}
-  
-    async create(owner:ONG ,data: CreatePetDTOType) {
-      const ongAddress = await this.prisma.address.findUnique({
-        where: { id: owner.addressId }
-      });
+	constructor(private prisma: PrismaClient) {}
 
-      if (!ongAddress) {
-        throw new OngAddressError();
-      }
+	async create(owner: ONG, data: CreatePetDTOType) {
+		const ongAddress = await this.prisma.address.findUnique({
+			where: { id: owner.addressId },
+		});
 
-      const newPet : Omit<Pet, "id"> = {
-        city: ongAddress.city,
-        ongId: owner.id,
-        ...data,
-        age: data.age,
-        size: data.size,
-        breed: data.breed,
-        description: data.description ?? "",
-        type: data.type,
-        created_at: new Date(),
-        updated_at: new Date(),
-        is_adopted: false,
-        userId: null,
-      }
+		if (!ongAddress) {
+			throw new OngAddressError();
+		}
 
-      return this.prisma.pet.create({ data : newPet });
-    }
-  
-    async findPetById(id: string) {
-      const pet = await this.prisma.pet.findUnique({
-        where: { id },
-      });
-  
-      if (pet) {
-        const ong = await this.prisma.oNG.findUnique({
-          where: { id: pet.ongId }
-        });
+		const newPet: Omit<Pet, "id"> = {
+			city: ongAddress.city,
+			ongId: owner.id,
+			...data,
+			age: data.age,
+			size: data.size,
+			breed: data.breed,
+			description: data.description ?? "",
+			type: data.type,
+			created_at: new Date(),
+			updated_at: new Date(),
+			is_adopted: false,
+			userId: null,
+		};
 
-        if (!ong) {
-          return null;
-        }
+		return this.prisma.pet.create({ data: newPet });
+	}
 
-        const ongAddress = await this.prisma.address.findUnique({
-          where: { id: ong.addressId}
-        });
+	async findPetById(id: string) {
+		const pet = await this.prisma.pet.findUnique({
+			where: { id },
+		});
 
-        return {
-          ongResponsavel: {
-            ...ong,
-            password : undefined,
-            address: ongAddress
-          },
-          ...pet,
-          _links: {
-            self: { href: `/pets/${pet.id}` },
-            findWithFilters: { href: `/pets/${pet.city}/filters` },
-          },
-        };
-      }
-  
-      return null;
-    }
+		if (pet) {
+			const ong = await this.prisma.oNG.findUnique({
+				where: { id: pet.ongId },
+			});
 
-    async findWithFilters(
-      city: string,
-      size?: PetSize,
-      age?: number,
-      breed?: string,
-      type?: PetType
-    ) {
-      const filters: any = {};
-  
-      filters.city = city;
-      filters.is_adopted = false;
-      if (size) filters.size = size;
-      if (age) filters.age = age;
-      if (breed) filters.breed = breed;
-      if (type) filters.type = type;
-  
-      const pets = await this.prisma.pet.findMany({
-        where: filters,
-      });
-  
-      return pets.map((pet) => ({
-        ...pet,
-        _links: {
-          self: { href: `/pets/${pet.id}` },
-          findWithFilters: { href: `/pets/${pet.city}/filters` },
-        },
-      }));
-    }
-  
-    async toggleAdoptionStatus(petId: string, idOfTheUserWhoAdopted: string) {
-      return this.prisma.pet.update({
-        where: { id: petId },
-        data: {
-          is_adopted: true,
-          adopted_by: {
-            connect: { id: idOfTheUserWhoAdopted }
-          },
-        },
-      });
-    }
+			if (!ong) {
+				return null;
+			}
 
-    async getAdoptedPets(){
-      return this.prisma.pet.findMany({
-        where: { is_adopted: true }
-      });
-    }
+			const ongAddress = await this.prisma.address.findUnique({
+				where: { id: ong.addressId },
+			});
 
-    async deletePet(petId: string) {
-      return this.prisma.pet.delete({
-        where: { id: petId }
-      });
-    }
+			return {
+				ongResponsavel: {
+					...ong,
+					password: undefined,
+					address: ongAddress,
+				},
+				...pet,
+				_links: {
+					self: { href: `/pets/${pet.id}` },
+					findWithFilters: { href: `/pets/${pet.city}/filters` },
+				},
+			};
+		}
+
+		return null;
+	}
+
+	async findWithFilters(
+		city: string,
+		size?: PetSize,
+		age?: number,
+		breed?: string,
+		type?: PetType,
+	) {
+		const filters: any = {};
+
+		filters.city = city;
+		filters.is_adopted = false;
+		if (size) filters.size = size;
+		if (age) filters.age = age;
+		if (breed) filters.breed = breed;
+		if (type) filters.type = type;
+
+		const pets = await this.prisma.pet.findMany({
+			where: filters,
+		});
+
+		return pets.map(pet => ({
+			...pet,
+			_links: {
+				self: { href: `/pets/${pet.id}` },
+				findWithFilters: { href: `/pets/${pet.city}/filters` },
+			},
+		}));
+	}
+
+	async toggleAdoptionStatus(petId: string, idOfTheUserWhoAdopted: string) {
+		return this.prisma.pet.update({
+			where: { id: petId },
+			data: {
+				is_adopted: true,
+				adopted_by: {
+					connect: { id: idOfTheUserWhoAdopted },
+				},
+			},
+		});
+	}
+
+	async getAdoptedPets() {
+		return this.prisma.pet.findMany({
+			where: { is_adopted: true },
+		});
+	}
+
+	async deletePet(petId: string) {
+		return this.prisma.pet.delete({
+			where: { id: petId },
+		});
+	}
 }
